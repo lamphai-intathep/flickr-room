@@ -8,9 +8,16 @@
 
 import Foundation
 
-enum State {
+//enum State {
+//    case loading
+//    case loaded(presenter: GalleryPresenter)
+//    case empty
+//    case error(Error)
+//}
+
+enum State<P: GalleryPresenter> {
     case loading
-    case loaded(presenter: GalleryPresenter)
+    case loaded(P)
     case empty
     case error(Error)
 }

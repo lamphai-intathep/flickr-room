@@ -8,31 +8,47 @@
 
 import UIKit
 
-struct FlickClient {
+class FlickClient { // use any URLSession not the one created in here, so inject in
+    let urlSession: URLSession
+    let baseURL: URL
+
+    init(urlSession: URLSession, baseURL: URL) {
+        self.urlSession = urlSession
+        self.baseURL = baseURL
+    }
+    
     func fetchPhotos(seachText: String?, completion: @escaping (PhotoEnvelop) -> Void) {
         let url: URL!
+        
         if let text = seachText, !text.isEmpty {
             let query: [String: String] = [
-                "method": Constants.searchMethod,
-                "api_key": Constants.api_key,
+                "method": "flickr.photos.search",
+                "api_key": FlickClient.api_key,
                 "text": text,
                 "format": "json",
                 "nojsoncallback": "1"
             ]
-            url = Constants.baseURL?.withQueries(query)
+            url = self.baseURL.withQueries(query)
         } else {
-            url = URL(string: Constants.defaultURL)
+            let query: [String: String] = [
+                "method": "flickr.galleries.getPhotos",
+                "api_key": FlickClient.api_key,
+                "gallery_id": "72157712273183531",
+                "format": "json",
+                "nojsoncallback": "1"
+            ]
+            url = self.baseURL.withQueries(query)
         }
-        //print(url!)
-        
+        //print(">>>>>>> real url: \(url!)")
+    
         if let url = url {
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
+            urlSession.dataTask(with: url) { (data, response, error) in
                 DispatchQueue.main.async {
                     if error != nil {
                         print("Loading photo failed: \(String(describing: error))")
                         return
                     }
-                    
+
                     if let data = data {
                         if let response = self.parseJSON(data: data) {
                             completion(response)
@@ -46,20 +62,21 @@ struct FlickClient {
     
     func parseJSON(data: Data) -> PhotoEnvelop? {
         do {
+            print("parseJSON: \(data)")
             let decoder = JSONDecoder()
             let photoInfo = try decoder.decode(PhotoEnvelop.self, from: data)
+            //print(photoInfo)
             return photoInfo
-        } catch {
-            print("Parsing JSON failed: \(error)")
+        } catch let e {
+            print("Parsing JSON failed: \(e)")
             return nil
         }
     }
 }
 
-extension URL {
-    func withQueries(_ queries: [String: String]) -> URL? {
-        var components = URLComponents(url: self, resolvingAgainstBaseURL: true)
-        components?.queryItems = queries.map { URLQueryItem(name: $0.0, value: $0.1) }
-        return components?.url
-    }
+extension FlickClient {
+    static let api_key = "9cb35f2e97740dd5da38acab2c6aa9ca"
+    static let baseURL = URL(string: "https://www.flickr.com/services/rest/")!
+    static let defaultURL = "https://www.flickr.com/services/rest/?method=flickr.galleries.getPhotos&api_key=9cb35f2e97740dd5da38acab2c6aa9ca&gallery_id=72157712273183531&format=json&nojsoncallback=1"
+    static let searchMethod = "flickr.photos.search"
 }

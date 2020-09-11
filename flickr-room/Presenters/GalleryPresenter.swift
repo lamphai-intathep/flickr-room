@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct GalleryPresenter {
+class GalleryPresenter {
     var photoEnvelop: PhotoEnvelop
     
     init(photoEnvelop: PhotoEnvelop) {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct PhotoPresenter {
+class PhotoPresenter {
     var photo: Photo
     
     init(photo: Photo) {

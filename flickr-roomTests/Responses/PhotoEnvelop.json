@@ -1,0 +1,34 @@
+{
+    "photos": {
+        "photo": [
+            {
+            "id": "48464526327",
+            "secret": "25c0dfce4d",
+            "server": "65535",
+            "farm": 6,
+            "title": "Australia"
+            },
+            {
+            "id": "33425922658",
+            "secret": "d627e401fd",
+            "server": "7920",
+            "farm": 8,
+            "title": "Canberra Capital"
+            },
+            {
+            "id": "32464340707",
+            "secret": "4469aaa6f4",
+            "server": "7907",
+            "farm": 8,
+            "title": "Melbourne City"
+            },
+            {
+            "id": "324643407078",
+            "secret": "4469aaa6f5",
+            "server": "7909",
+            "farm": 8,
+            "title": "Great Ocean Road"
+            }
+        ]
+    }
+}

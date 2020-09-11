@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PhotoViewController: UIViewController, UIScrollViewDelegate {
+class PhotoViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
     var url: URL?
@@ -17,6 +17,7 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         if let url = url {
             imageView.loadFromURL(url: url)
+            //print("PhotoViewController: \(url)")
         }
     }
 }
